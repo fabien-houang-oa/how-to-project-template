@@ -1,0 +1,12 @@
+{
+   "flow_id":"p360_md_mara_gbo_wise",
+   "flow_step":"99_end",
+   "state":"DONE",
+   "action_label":"p360_ibi_t_local_plant_data_wise",
+   "action_url":"https://{AIRFLOW_WEBSERVER_ID}.appspot.com/api/experimental/dags/p360_ibi_t_local_plant_data_wise/dag_runs",
+   "trigger_condition":{
+      "condition_label":"p360_always_trigger",
+      "condition_sql":"SELECT '' AS trigger"
+   },
+   "action_method":"POST"
+}

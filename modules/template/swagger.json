@@ -1,0 +1,125 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "API Swagger for Augmented Product",
+        "description": "An API that returns product metadata based on QR code\n",
+        "contact": {
+            "name": "L'Oréal HIP API team",
+            "email": "API_PO@loreal.com"
+        }
+    },
+    "host": "loreal-mvp-dev.apigee.net",
+    "basePath": "/global/customer/v1/augmentedproduct",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/trace/gtin/{gtin}/lot/{lot}": {
+            "get": {
+                "operationId": "get_domain_resource",
+                "description": "AugmentedProduct.",
+                "tags": [
+                    "augmented product"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "gtin",
+                        "description": "The ean11 code",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "lot",
+                        "description": "The lot of the product",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "bearer token",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "default": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "service": {
+            "type": "object",
+            "properties": {
+                "PKey": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ErrorModel": {
+            "type": "object",
+            "required": [
+                "code",
+                "reason",
+                "message"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "ErrorRequest": {
+            "type": "object",
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/ErrorModel"
+                }
+            }
+        }
+    }
+}

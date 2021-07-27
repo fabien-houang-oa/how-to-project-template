@@ -1,0 +1,49 @@
+[
+  {
+    "name": "string",
+    "config_regex": "^gs://${app_name_short}-gcs-example-${multiregion}-${project_env}/whatever/sub/folder/[.]+-[.]*[.].*.csv$",
+    "resource_substitution": "string",
+    "action_type": "bq_load",
+    "next_step_id": "string",
+    "cloudbuild_params": {
+      "cloudbuild_image": "gcr.io/path/to/image"
+    },
+    "bq_load_params": {
+      "project": "${project}",
+      "dataset": "${app_name_short}_ds_example_${project_env}",
+      "table": "PRODUCT_{execution_id}_v1",
+      "schema": "string",
+      "file_type": "csv",
+      "csv_options": {
+        "count_lines": false,
+        "skip_lines": 0,
+        "delimiter": ";",
+        "quotechar": "\"",
+        "allow_jagged_rows": false,
+        "allow_quoted_newlines": false
+      },
+      "ignore_unknown_values": false,
+      "max_bad_records": 0,
+      "file_size_min": 0,
+      "file_size_max": 0,
+      "insert_mode": "always",
+      "insert_mode_delay": 0
+    },
+    "sql_transformation_params": {
+      "project": "${project}",
+      "dataset": "${app_name_short}_ds_whatever_${project_env}",
+      "table": "PRODUCT_{execution_id}_v1",
+      "sql": "select * from table, or gs://my-bucket/my-script.sql",
+      "job_priority": "interactive",
+      "check_result": false
+    },
+    "url_transformation_params": {
+      "endpoint": "https://example.com/",
+      "method": "POST",
+      "payload": "{\"data\":\"...\"}"
+    },
+    "copy_params": {
+      "dst_bucket": "gs://my-bucket"
+    }
+  }
+]

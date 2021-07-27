@@ -1,0 +1,9 @@
+{
+   "project_env": "dv",
+   "project": "itg-btdpfront-gbl-ww-dv",
+   "btdpback-project": "itg-btdpback-gbl-ww-dv",
+   "btdpfront-project": "itg-btdpfront-gbl-ww-dv",
+   "APIGEE_ENDPOINT": "https://dev-emea.api.loreal.net/global/it4it/v1/coeapis",
+   "APIGEE_ENV": "dev",
+   "APIGEE_ORG": "loreal-emea-dev"
+}

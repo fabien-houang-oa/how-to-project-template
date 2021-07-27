@@ -1,0 +1,11 @@
+dataset: dsdemo_c3_101
+view_id: v_dsdemo
+description: dsdemo
+privacy: true
+gdpr: false
+data_domain: dsdemo
+data_family: 101
+confidentiality: c3
+version: 1
+level: 0
+query: SELECT * FROM `project.btdp_ds_c3_101_dsdemo_location_env.t_dsdemo_v1`

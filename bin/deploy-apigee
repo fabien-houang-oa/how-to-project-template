@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -euo pipefail;
+
+CONF_API_FILE="api_conf.json"
+SWAGGER_FILE="swagger.json"
+
+if [ ! -f ${CONF_API_FILE} ];
+    then echo "Missing required ${CONF_API_FILE} file";
+    exit 1;
+fi;
+if [ ! -f ${SWAGGER_FILE} ]
+    then echo "Missing required ${SWAGGER_FILE} file";
+    exit 1;
+fi;
+
+
+APIGEE_CREDENTIALS=$(gcloud secrets versions access latest --secret="azure-apigee-credentials");
+
+# retrieving secrets for authentication
+CLIENT_ID=$(echo ${APIGEE_CREDENTIALS} | jq -r .CLIENT_ID);
+CLIENT_SECRET=$(echo ${APIGEE_CREDENTIALS} | jq -r .CLIENT_SECRET);
+SCOPE=$(echo ${APIGEE_CREDENTIALS} | jq -r .SCOPE);
+TENANT_ID=$(echo ${APIGEE_CREDENTIALS} | jq -r .TENANT_ID);
+
+# retrieving api configuration
+APINAME=$(jq -r .apiname ${CONF_API_FILE});
+APIBASEPATH=$(jq -r .apibasepath ${CONF_API_FILE});
+TARGETBASEPATH=$(jq -r .targetbasepath ${CONF_API_FILE});
+
+# creating short-lived token for authent
+TOKEN=$(curl --location --request POST "https://api.loreal.net/v1/oauth20/token" \
+                --header "Content-Type: application/x-www-form-urlencoded" \
+                --data-urlencode "grant_type=client_credentials" \
+                --data-urlencode "client_secret=${CLIENT_SECRET}" \
+                --data-urlencode "client_id=${CLIENT_ID}" \
+                --data-urlencode "scope=api://${SCOPE}/.default" | jq -r .access_token);
+
+# retrieving URL of cloud run module
+TARGET=$(gcloud run services describe --project ${PROJECT} btdp-gcr-${MODULE_NAME_SHORT}-ew1-${ENV} --region=europe-west1 --format=json | jq -r .status.address.url);
+
+# API publication to APIGEE
+curl --location --request POST "${APIGEE_ENDPOINT}/${APIGEE_ORG}/${APIGEE_ENV}/publish" \
+--header "org: ${APIGEE_ORG}" \
+--header "env: ${APIGEE_ENV}" \
+--header "apiname: ${APINAME}" \
+--header "api-basepath: ${APIBASEPATH}" \
+--header "spectype: rest" \
+--header "oauth2-aad-audience: api://${SCOPE}" \
+--header "oauth2-aad-role: CICD.RW" \
+--header "api-type: system" \
+--header "target: ${TARGET}" \
+--header "target-basepath: ${TARGETBASEPATH}" \
+--header "oauth2-gcp-token: yes" \
+--header "Authorization: Bearer ${TOKEN}" \
+--header "Content-Type: application/json" \
+-d @${SWAGGER_FILE};

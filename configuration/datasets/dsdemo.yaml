@@ -1,0 +1,24 @@
+#Template for Datasets
+dataset_id: dsdemo
+description: dsdemo
+friendly_name: dsdemo
+criticity: c3                       #c1,c2 or c3
+location: eu
+data_domain: dsdemo
+domain_code: 101
+owned_by: swathi.subramanian@loreal.com                      #Data owner email address
+delete_contents_on_destroy: true
+delete_table_expiration_ms: null
+permissions:
+  ssu:
+    owners:
+          - user:swathi.subramanian@loreal.com
+  np:
+    owners:
+        - serviceAccount:system@itg-btdpsecurity-gbl-ww-pd.iam.gserviceaccount.com
+  pd:
+    owners:
+        - serviceAccount:system@itg-btdpsecurity-gbl-ww-pd.iam.gserviceaccount.com
+tags:
+  entry_group_id: domain_layer_101_dsdemotest
+  layer: DOMAIN LAYER

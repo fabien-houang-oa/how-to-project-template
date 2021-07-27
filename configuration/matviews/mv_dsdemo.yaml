@@ -1,0 +1,6 @@
+---
+dataset: dsdemo_c3_101
+table_id: mv_dsdemo
+query: SELECT id, name, count(*) as total FROM `project.btdp_ds_c3_101_dsdemo_eu_env.t_dsdemo_v1` GROUP BY id, name
+enableRefresh: true
+refreshIntervalMs: 3600000

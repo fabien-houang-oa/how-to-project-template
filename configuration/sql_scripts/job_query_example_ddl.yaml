@@ -1,0 +1,9 @@
+job_id_prefix: job_example_ddl
+query:
+  query: |-
+    CREATE TABLE IF NOT EXISTS dataset.example(
+      x FLOAT64,
+      y FLOAT64
+    );
+  create_disposition: ""
+  write_disposition: ""

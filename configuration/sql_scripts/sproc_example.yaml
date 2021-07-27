@@ -1,0 +1,19 @@
+dataset_id: dataset
+routine_id: sproc_example
+description: |-
+  A stored procedure example.
+  This procedure concatenate a generated UUID to a string prefix.
+definition_body: |-
+  BEGIN
+    SET id = GENERATE_UUID();
+    SELECT CONCAT(prefix, "-", id);
+  END;
+arguments:
+  - name : "prefix"
+    data_type : |-
+      {"typeKind" :  "STRING"}
+    mode: IN
+  - name : "id"
+    data_type : |-
+      {"typeKind" :  "STRING"}
+    mode: OUT

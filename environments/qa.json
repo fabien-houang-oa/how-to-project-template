@@ -1,0 +1,9 @@
+{
+   "project_env": "qa",
+   "project": "itg-neoanalytics-gbl-ww-qa",
+   "btdpback-project": "itg-btdpback-gbl-ww-qa",
+   "btdpfront-project": "itg-btdpfront-gbl-ww-qa",
+   "APIGEE_ENDPOINT": "https://dev-emea.api.loreal.net/global/it4it/v1/coeapis",
+   "APIGEE_ENV": "dev",
+   "APIGEE_ORG": "loreal-emea-dev"
+}

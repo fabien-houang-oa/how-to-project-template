@@ -1,0 +1,83 @@
+generate_execution_id:
+  params: [flow_id, file_name]
+  steps:
+    - generate_execution_id:
+        call: http.post
+        args:
+            url: "https://btdp-gcr-monitoringinterface-ew1-${project_env}-${cloudrun_url_suffix}.a.run.app/executions"
+            auth:
+              type: OIDC
+            body:
+              flow_id: $${flow_id}
+              file_name: $${file_name}
+        result: execution_id
+
+start_monitoring:
+  params: [projectId, flow_id, flow_step, execution_id]
+  steps:
+    - init_monitoring_messages:
+        assign:
+          - start_monitoring_message:
+              event_time: $${sys.now()}
+              state: "STARTED"
+              flow_id: $${flow_id}
+              flow_step: $${flow_step}
+              execution_id: $${execution_id}
+              source:
+                type: "query"
+    - start_publish_monitoring:
+        try:
+          call: googleapis.pubsub.v1beta2.projects.topics.publish
+          args:
+            topic: $${"projects/"+ projectId+"/topics/btdp-topic-monitoring-${project_env}"}
+            body:
+              messages:
+                data: $${base64.encode(text.encode(json.encode_to_string(start_monitoring_message)))}
+          result: startPubsubResult
+        except:
+          as: e
+          steps:
+            - handle_strat_monitoring_error:
+                switch:
+                  - condition: $${e.code == 404}
+                    raise: "PubSub Topic not found"
+                  - condition: $${e.code == 403}
+                    raise: "Error authenticating to PubSub"
+            - handle_start_monitoring_error_exception:
+                raise: $${e}
+
+end_monitoring:
+  params: [projectId, flow_id, flow_step, execution_id, insert_result]
+  steps:
+    - init_end_monitoring_messages:
+        assign:
+          - end_monitoring_message:
+              event_time: $${sys.now()}
+# state MUST be DONE or ERROR. If Error, the additional comment field must be fulfil.
+              state: $${insert_result}
+              flow_id: $${flow_id}
+              flow_step: $${flow_step}
+              execution_id: $${execution_id}
+              source:
+                type: "query"
+    - end_publish_monitoring:
+        try:
+          call: googleapis.pubsub.v1beta2.projects.topics.publish
+          args:
+              topic: $${"projects/"+ projectId+"/topics/btdp-topic-monitoring-${project_env}"}
+              body:
+                messages:
+                  data: $${base64.encode(text.encode(json.encode_to_string(end_monitoring_message)))}
+
+          result: endPubsubResult
+        except:
+          as: e
+          steps:
+            - handle_end_monitoring_error:
+                switch:
+                  - condition: $${e.code == 404}
+                    raise: "PubSub Topic not found"
+                  - condition: $${e.code == 403}
+                    raise: "Error authenticating to PubSub"
+            - handle_end_monitoring_error_exception:
+                raise: $${e}

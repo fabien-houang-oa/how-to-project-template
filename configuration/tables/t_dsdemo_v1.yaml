@@ -1,0 +1,25 @@
+---
+table_id: t_dsdemo_v1
+dataset: dsdemo_c3_101
+range_partitioning: null
+time_partitioning: null
+clustering: null
+description: demo test
+gdpr: false
+privacy: false
+confidentiality: c3
+data_domain: dsdemo
+data_family: 101
+data_gbo: null
+version: 1
+previous_version: 0
+schema:
+- mode: NULLABLE
+  name: id
+  type: STRING
+- mode: NULLABLE
+  name: name
+  type: STRING
+- mode: NULLABLE
+  name: extraction_date
+  type: DATETIME

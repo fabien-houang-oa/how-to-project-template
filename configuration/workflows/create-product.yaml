@@ -1,0 +1,53 @@
+main:
+    params: [args]
+    steps:
+        - init_global:
+            assign:
+            - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+        - init_flow:
+            call: generate_execution_id
+            args:
+              flow_id: ${flow_id}
+              file_name: fileTest
+            result: execution_id
+        - query1:
+            call: bq_job_insertion
+            args:
+              projectId: $${projectId}
+              flow_id: ${flow_id}
+              flow_step: 801_sqltransfo
+              execution_id: $${execution_id}
+              query: >
+                select CURRENT_TIMESTAMP() AS insertion_time_product, GA_BLOCNOTE as GA_BLOCNOTE_PRODUCT,
+                GA_COEFPROD as GA_COEFPROD_PRODUCT
+                from `${project}.btdp_ds_mars_${location}_${project_env}.article_fr`
+                WHERE DATE(insertion_time) = '2021-04-20' LIMIT 20;
+            result: insert_result
+
+        - query2:
+            call: bq_job_insertion
+            args:
+              projectId: $${projectId}
+              flow_id: ${flow_id}
+              flow_step: 802_sqltransfo
+              execution_id: $${execution_id}
+              query: >
+                select CURRENT_TIMESTAMP() AS insertion_time_product, GA_BLOCNOTE as GA_BLOCNOTE_PRODUCT,
+                GA_COEFPROD as GA_COEFPROD_PRODUCT
+                from `${project}.btdp_ds_mars_${location}_${project_env}.article_fr`
+                WHERE DATE(insertion_time) = '2021-04-20' LIMIT 20;
+            result: insert_result
+
+        - query3:
+            call: bq_job_insertion
+            args:
+              projectId: $${projectId}
+              flow_id: ${flow_id}
+              flow_step: 801_sqltransfo
+              execution_id: $${execution_id}
+              query: >
+                select CURRENT_TIMESTAMP() AS insertion_time_product, GA_BLOCNOTE as GA_BLOCNOTE_PRODUCT,
+                GA_COEFPROD as GA_COEFPROD_PRODUCT
+                from `${project}.btdp_ds_mars_${location}_${project_env}.article_fr`
+                WHERE DATE(insertion_time) = '2021-04-20' LIMIT 20;
+            result: insert_result
