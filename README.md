@@ -14,29 +14,31 @@ The purpose of this repository is to explain how to use the Project template to 
 
 
 ## Prerequisites
-1. click on the green button "Use this template" on the [Project Template github page](https://github.com/loreal-datafactory/project-template) to create a new repository with the Project Template
-2. clone the created repository
+1. Click on the green button "Use this template" on the [Project Template github page](https://github.com/loreal-datafactory/project-template) to create a new repository with the Project Template
+2. Clone the created repository
 
 
 ## Initialize the Project
 
-- Modify `.app_name` file with your application name inside.
+#### 1. Modify `.app_name` file with your application name, recommend to use your github repository name.
 
-- Create a sandbox environment file (`sbx.json` for example) in `environments` folder with 
+#### 2. Create a sandbox environment file `<my-env>.json`(`sbx.json` for example) in `environments/` folder with 
 
 ```json
 {
     "project": "<my-project-id>"
 }
 ```
+Replace `<my-project-id>` by your GCP project ID
 
-- Specify the env and init:
-> warning: ensure that the content of the `setup/init` directory matches your
+#### 3. Specify the env and init:
+> warning: ensure that the content of the `setup/init/` directory matches your
 > needs before executing the command. Adapt to your needs.
 
 ```shell
 ENV=<my-env> make init
 ```
+Replace `<my-env>` by `sbx` if your environment file is `sbx.json`
 
 If your cloud build needs permissions to use cloud run, see how to set the permissions up in the [GCP doc](https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#required_iam_permissions):
 
@@ -47,35 +49,98 @@ If your cloud build needs permissions to use cloud run, see how to set the permi
 
 ## Configure the Project
 
-- After having successfully initialize the project, go into the `configuration` folder and move all the folders with default example config files in an `examples/` folder:
+#### 1. After having successfully initialize the project, go into the `configuration/` folder and move all the folders with the example config files in an `examples/` folder:
 
 ```shell
 mkdir configuration/examples/
 mv configuration/* configuration/examples/
 ```
 
-- Now, if you `ENV=<my-env> make iac-plan` without any config file, it should init terraform and should not offer you to create any additional resources.
+#### 2. Now, run `ENV=<my-env> make iac-plan` without any config file
+It should init terraform and should not offer you to create any additional resources.
 
-- Base on the examples, create your own config files according to your needs:
+#### 3. Base on the examples, create your own config files according to your needs:
 
 For example if you need to create a dataset in Bigquery:
 ```shell
 mkdir configuration/datasets/
-vim configuration/datasets/<your-dataset>.yaml
+vim configuration/datasets/<my-dataset>.yaml
 ```
 
-Configure your `<your-dataset>.yaml` file base on the template in `configuration/examples/datasets/`
+Configure your `<my-dataset>.yaml` file base on the template in `configuration/examples/datasets/`
 
 Same for configinterface_api, flows, matviews, sql_scripts, state-machine, tables, views, workflows, ...
 
-- Modify terraform files in `iac/` folder according to the infrastructure you need for your project.
+#### 4. Modify terraform files in `iac/` folder according to the infrastructure you need for your project.
+
+#### 5. Use `ENV=<my-env> make iac-clean`, `ENV=<my-env> make iac-plan` and `ENV=<my-env> make iac-deploy` to clean, plan and deploy your resources.
 
 ## Initialize the CICD
+
+#### 1. Edit `environments/cicd.json`
+
+```json
+{
+    "project": "<my-project-id>",
+    "triggers_env": {
+        "<my-env>": {
+          "branch": "develop",
+          "disabled": true
+        }
+    },
+    "pullrequest_env":"<my-env>",
+    "owner":"<my-github-username>"
+}
+```
+
+For example:
+```json
+{
+    "project": "btdp-sbx-f-houang",
+    "triggers_env": {
+        "sbx": {
+          "branch": "develop",
+          "disabled": true
+        }
+    },
+    "pullrequest_env":"sbx",
+    "owner":"fabien-houang-oa"
+}
+```
+
+#### 2. In `setup/cicd/`, modify Makefile to suit your needs
+
+#### 3. In `setup/cicd/`, modify Terraform files to suit your needs
+
+#### 4. Run to init cicd
+
+```shell
+cd setup/cicd/
+ENV=cicd make all
+```
+
+or from the root repo
+```shell
+ENV=cicd make cicd
+```
+
+or from root with cloud build
+```shell
+ENV=cicd make gcb-cicd
+```
+
+if you encounter this error while trying to create triggers :
+```shell
+Error creating Trigger: googleapi: Error 400: Repository mapping does not exist. Please visit <link>
+```
+Follow the link and connect your github repository to Cloud Build
+
 
 
 ## Simple example project
 
 ### Purpose
+
 1. Create a workflow doing a join between Facts Table and Master Data Table
 (Fact Table is in delta mode / Master Data Table is in Full)
 
