@@ -1,7 +1,7 @@
 # README - How to use Project template
 
 ## Purpose
-The purpose of this repository is to explain how to use the Project template to start your own project.
+The purpose of this repository is to explain how to use the Project Template to start your own project.
 
 
 ## Table of content
@@ -22,7 +22,7 @@ The purpose of this repository is to explain how to use the Project template to 
 
 #### 1. Modify `.app_name` file with your application name, recommend to use your github repository name.
 
-#### 2. Create a sandbox environment file `<my-env>.json`(`sbx.json` for example) in `environments/` folder with 
+#### 2. Create a sandbox environment file `<my-env>.json` (`sbx.json` for example) in `environments/` folder with 
 
 ```json
 {
@@ -47,16 +47,17 @@ If your cloud build needs permissions to use cloud run, see how to set the permi
 3. In the Additional steps may be required pop-up, click on SKIP. Do NOT click on GRANT ACCESS TO ALL SERVICE ACCOUNTS
 4. For increased security, grant the Service Account User role to only the Cloud Run Runtime Service Account. For instructions on doing this, see [Using minimal IAM permissions](https://cloud.google.com/build/docs/deploying-builds/deploy-cloud-run#continuous-iam).
 
+
 ## Configure the Project
 
-#### 1. After having successfully initialize the project, go into the `configuration/` folder and move all the folders with the example config files in an `examples/` folder:
+#### 1. After having successfully initialize the project, go into the `configuration/` folder and move all the folders with the default config files in an `examples/` folder:
 
 ```shell
 mkdir configuration/examples/
 mv configuration/* configuration/examples/
 ```
 
-#### 2. Now, run `ENV=<my-env> make iac-plan` without any config file
+#### 2. Now, run `ENV=<my-env> make iac-plan`
 It should init terraform and should not offer you to create any additional resources.
 
 #### 3. Base on the examples, create your own config files according to your needs:
@@ -67,13 +68,14 @@ mkdir configuration/datasets/
 vim configuration/datasets/<my-dataset>.yaml
 ```
 
-Configure your `<my-dataset>.yaml` file base on the template in `configuration/examples/datasets/`
+Configure your `<my-dataset>.yaml` file base on the template file in `configuration/examples/datasets/`
 
-Same for configinterface_api, flows, matviews, sql_scripts, state-machine, tables, views, workflows, ...
+Same for configinterface_api, flows, matviews, sql_scripts, state-machine, tables, buckets, views, workflows, ...
 
 #### 4. Modify terraform files in `iac/` folder according to the infrastructure you need for your project.
 
 #### 5. Use `ENV=<my-env> make iac-clean`, `ENV=<my-env> make iac-plan` and `ENV=<my-env> make iac-deploy` to clean, plan and deploy your resources.
+
 
 ## Initialize the CICD
 
@@ -84,8 +86,8 @@ Same for configinterface_api, flows, matviews, sql_scripts, state-machine, table
     "project": "<my-project-id>",
     "triggers_env": {
         "<my-env>": {
-          "branch": "develop",
-          "disabled": true
+          "branch": "<my-branch>",
+          "disabled": true|false
         }
     },
     "pullrequest_env":"<my-env>",
@@ -112,7 +114,7 @@ For example:
 
 #### 3. In `setup/cicd/`, modify Terraform files to suit your needs
 
-#### 4. Run to init cicd
+#### 4. Init cicd
 
 ```shell
 cd setup/cicd/
@@ -142,7 +144,8 @@ Follow the link and connect your github repository to Cloud Build
 ### Purpose
 
 1. Create a workflow doing a join between Facts Table and Master Data Table
-(Fact Table is in delta mode / Master Data Table is in Full)
+(Fact Table is in delta mode / Master Data Table is in Full).
+This workflow have to be call each time an new delta is received for Fact table (or if the master data is updated)
 
 2. Create an API (querying the resulting table)
 
