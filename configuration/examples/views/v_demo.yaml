@@ -8,4 +8,4 @@ data_family: 101
 confidentiality: c3
 version: 1
 level: 1
-query: SELECT * FROM `project.btdp_ds_c3_101_dsdemo_location_env.v_dsdemo`
+query: SELECT * FROM `project.dataset.v_dsdemo`

@@ -1,0 +1,15 @@
+table_id: master_table
+dataset: tutodata_c3_101
+range_partitioning: null
+time_partitioning: null
+clustering: null
+description: master table to store tuto data
+gdpr: false
+privacy: true
+confidentiality: c3
+data_domain: tutodata
+data_family: 101
+data_gbo: null
+version: 1
+previous_version: 0
+schema: null

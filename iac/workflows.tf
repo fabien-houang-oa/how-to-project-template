@@ -1,6 +1,6 @@
 locals {
 
-  wrk_file_extension = "*.yaml"
+  wrk_file_extension = "yaml"
   workflows_list = {
     for file in fileset("${local.configuration_folder}/workflows", "**/[^.]*.${local.wrk_file_extension}") :
     replace(basename(file), ".${local.wrk_file_extension}", "") => templatefile(
@@ -27,11 +27,8 @@ locals {
     )
   ]
   workflows_sa_roles = toset([
-    "roles/owner",
-    "roles/bigquery.dataOwner",
     "roles/bigquery.admin",
     "roles/storage.admin",
-    "roles/pubsub.publisher",
     "roles/run.invoker"
   ])
 }
@@ -40,6 +37,14 @@ resource "google_service_account" "workflows_sa" {
   account_id   = "template-sa-workflow-${local.project_env}"
   display_name = "Service Account for workflow template"
   description  = "Service Account for workflow template"
+}
+
+resource "google_project_iam_member" "workflows_iam" {
+  for_each = local.workflows_sa_roles
+  provider = google-beta
+  project  = local.project
+  role     = each.key
+  member   = "serviceAccount:${google_service_account.workflows_sa.email}"
 }
 
 resource "google_workflows_workflow" "workflow" {

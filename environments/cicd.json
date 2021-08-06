@@ -1,3 +1,11 @@
 {
-    "project": "itg-btdpshared-gbl-ww-pd"
+    "project": "btdp-sbx-f-houang",
+    "triggers_env": {
+        "sbx1": {
+          "branch": "develop",
+          "disabled": true
+        }
+    },
+    "pullrequest_env":"sbx1",
+    "owner":"fabien-houang-oa"
 }

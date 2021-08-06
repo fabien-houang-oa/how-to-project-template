@@ -25,7 +25,7 @@ locals {
     "multiregion",
     regex("^europe-", local.region) == "europe-" ? "eu" : (regex("^us-", local.region) == "us-" ? "us" : null)
   )
-  workflow_region = lookup(local.env, "workflow_region", local.region)
+  workflow_region = "europe-west4" #lookup(local.env, "workflow_region", local.region)
 
   btdpback_project = lookup(
     local.env,

@@ -28,11 +28,11 @@ APP_NAME ?= $(shell cd ../.. && cat .app_name)
 $(info "APP_NAME = $(APP_NAME)")
 APP_NAME_SHORT := $(shell sed 's/-//g' <<< "$(APP_NAME)")
 
-PROJECT ?= $(shell cat ../../environments/pd.json | jq -r '.project')
+PROJECT ?= $(shell cat ../../environments/$(ENV).json | jq -r '.project')
 $(info "PROJECT = $(PROJECT)")
 
 # -- bucket definitions
-DEPLOY_BUCKET    := $(APP_NAME_SHORT)-gcs-deploycicd-eu-pd
+DEPLOY_BUCKET    := $(APP_NAME_SHORT)-gcs-deploycicd-eu-$(ENV)
 
 # Files to protect
 PROTECTED_FILES := ./Makefile ./module.mk ./custom.mk
