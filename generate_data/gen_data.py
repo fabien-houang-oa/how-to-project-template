@@ -7,7 +7,7 @@ df_cities = pd.read_csv('gs://howtoprojecttemplate-gcs-tuto-data/upload/worldcit
 
 print(df_cities["id"])
 
-lines = 10000
+lines = 100000
 
 div= ["ACD", "CPD", "LUXE", "PPD"]
 

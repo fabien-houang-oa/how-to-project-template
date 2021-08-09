@@ -4,6 +4,7 @@ main:
         - init_global:
             assign:
             - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          
         - load_master_data:
             call: bq_job_insertion_wo_monitoring
             args:
@@ -28,4 +29,22 @@ main:
                   uris = ['gs://howtoprojecttemplate-gcs-tuto-data/fake_fact_table.csv'],
                   skip_leading_rows = 1
                 )
+            result: insert_result
+
+        - join_tables:
+            call: bq_job_insertion_wo_monitoring
+            args:
+              projectId: $${projectId}
+              query: >
+                CREATE OR REPLACE TABLE `howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.result` AS
+                WITH master_table AS (
+                  SELECT * FROM `howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.master_table` 
+                ),
+                fact_table AS (
+                  SELECT ARRAY_AGG(id) AS trans_id, ARRAY_AGG(sell) AS trans_sell, ARRAY_AGG(division) AS trans_div, ARRAY_AGG(date) AS trans_date, city_id
+                  FROM `howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.fact_table`
+                  GROUP BY city_id
+                )
+                SELECT * FROM master_table 
+                LEFT JOIN fact_table ON master_table.id=fact_table.city_id
             result: insert_result
