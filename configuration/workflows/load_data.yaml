@@ -16,7 +16,7 @@ main:
                   uris = ['gs://howtoprojecttemplate-gcs-tuto-data/upload/worldcities.csv'],
                   skip_leading_rows = 1
                 )
-            result: insert_result
+            result: load_master_data_result
 
         - load_fact_data:
             call: bq_job_insertion_wo_monitoring
@@ -29,7 +29,7 @@ main:
                   uris = ['gs://howtoprojecttemplate-gcs-tuto-data/fake_fact_table.csv'],
                   skip_leading_rows = 1
                 )
-            result: insert_result
+            result: load_fact_data_result
 
         - join_tables:
             call: bq_job_insertion_wo_monitoring
@@ -47,4 +47,4 @@ main:
                 )
                 SELECT * FROM master_table 
                 LEFT JOIN fact_table ON master_table.id=fact_table.city_id
-            result: insert_result
+            result: join_tables_result

@@ -1,0 +1,13 @@
+main:
+    params: [args]
+    steps:
+        - init_global:
+            assign:
+            - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+        - init_flow:
+            call: generate_execution_id
+            args:
+              flow_id: ${flow_id}
+              file_name: fileTest
+            result: execution_id
+          
