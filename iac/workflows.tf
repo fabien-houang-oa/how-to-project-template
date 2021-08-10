@@ -28,8 +28,7 @@ locals {
   ]
   workflows_sa_roles = toset([
     "roles/bigquery.admin",
-    "roles/storage.admin",
-    "roles/run.invoker"
+    "roles/storage.objectViewer",
   ])
 }
 resource "google_service_account" "workflows_sa" {
