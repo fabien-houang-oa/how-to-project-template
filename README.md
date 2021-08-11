@@ -204,11 +204,11 @@ vim iac/<my-cloud-function>.tf
 Check [`iac/functions.tf`](iac/functions.tf) for an example terrraform file for a cloud function.
 The code executed by the cloud function is in `utils/cloud_functions/`, don't forget to zip it like this :
 ```shell
-cd utils/could_functions/
+cd utils/cloud_functions/
 zip run_workflow.zip main.py requirements.txt
 ```
 
-[`main.py`](utils/could_functions/main.py) contains the python code executed by the cloud function.</br>
-[`requirements.txt`](utils/could_functions/requirements.txt) contains the libraries needed to execute the code.
+[`main.py`](utils/cloud_functions/main.py) contains the python code executed by the cloud function.</br>
+[`requirements.txt`](utils/cloud_functions/requirements.txt) contains the libraries needed to execute the code.
 
 #### 5. Create an API for querying the result table
