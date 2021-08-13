@@ -1,0 +1,19 @@
+main:
+    params: [args]
+    steps:
+        - init_global:
+            assign:
+            - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+
+        - get_load_master_query:
+            call: http.get
+            args:
+                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/load_master_data.sql?alt=media
+                headers:
+                    Content-Type: "text/plain"
+                auth:
+                    type: OAuth2
+            result: queryFromFile
+        - return_value:
+            return: $${queryFromFile.body}
+          

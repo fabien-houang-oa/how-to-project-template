@@ -4,47 +4,54 @@ main:
         - init_global:
             assign:
             - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+
+        - get_load_master_query:
+            call: http.get
+            args:
+                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/load_master_data.sql?alt=media
+                headers:
+                    Content-Type: "text/plain"
+                auth:
+                    type: OAuth2
+            result: get_load_master_query_resp
           
         - load_master_data:
             call: bq_job_insertion_wo_monitoring
             args:
               projectId: $${projectId}
-              query: >
-                CREATE OR REPLACE EXTERNAL TABLE howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.master_table
-                OPTIONS (
-                  format = 'CSV',
-                  uris = ['gs://howtoprojecttemplate-gcs-tuto-data/upload/worldcities.csv'],
-                  skip_leading_rows = 1
-                )
+              query: $${get_load_master_query_resp.body}
             result: load_master_data_result
+      
+        - get_load_fact_query:
+            call: http.get
+            args:
+                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/load_fact_data.sql?alt=media
+                headers:
+                    Content-Type: "text/plain"
+                auth:
+                    type: OAuth2
+            result: get_load_fact_query_resp
 
         - load_fact_data:
             call: bq_job_insertion_wo_monitoring
             args:
               projectId: $${projectId}
-              query: >
-                CREATE OR REPLACE EXTERNAL TABLE howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.fact_table
-                OPTIONS (
-                  format = 'CSV',
-                  uris = ['gs://howtoprojecttemplate-gcs-tuto-data/fake_fact_table.csv'],
-                  skip_leading_rows = 1
-                )
+              query: $${get_load_fact_query_resp.body}
             result: load_fact_data_result
+
+        - get_join_tables_query:
+            call: http.get
+            args:
+                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/join_tables.sql?alt=media
+                headers:
+                    Content-Type: "text/plain"
+                auth:
+                    type: OAuth2
+            result: get_join_tables_query_resp
 
         - join_tables:
             call: bq_job_insertion_wo_monitoring
             args:
               projectId: $${projectId}
-              query: >
-                CREATE OR REPLACE TABLE `howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.result` AS
-                WITH master_table AS (
-                  SELECT * FROM `howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.master_table` 
-                ),
-                fact_table AS (
-                  SELECT ARRAY_AGG(id) AS trans_id, ARRAY_AGG(sell) AS trans_sell, ARRAY_AGG(division) AS trans_div, ARRAY_AGG(date) AS trans_date, city_id
-                  FROM `howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1.fact_table`
-                  GROUP BY city_id
-                )
-                SELECT * FROM master_table 
-                LEFT JOIN fact_table ON master_table.id=fact_table.city_id
+              query: $${get_join_tables_query_resp.body}
             result: join_tables_result

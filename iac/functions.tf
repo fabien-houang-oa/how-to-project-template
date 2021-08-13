@@ -1,11 +1,12 @@
-resource "google_storage_bucket" "bucket" {
-  name = "${local.app_name_short}-gcs-functions"
+resource "google_storage_bucket" "bucket_function" {
+  name = "${local.app_name_short}-gcs-functions" #TO BE CHANGED if already exist
   project = local.project
+  force_destroy = true
 }
 
 resource "google_storage_bucket_object" "archive" {
   name   = "run_workflow.zip"
-  bucket = google_storage_bucket.bucket.name
+  bucket = google_storage_bucket.bucket_function.name
   source = "${path.module}/../utils/cloud_functions/run_workflow.zip"
 }
 
@@ -17,13 +18,13 @@ resource "google_cloudfunctions_function" "function" {
   region      = local.region
 
   available_memory_mb   = 128
-  source_archive_bucket = google_storage_bucket.bucket.name
+  source_archive_bucket = google_storage_bucket.bucket_function.name
   source_archive_object = google_storage_bucket_object.archive.name
   timeout               = 60
   entry_point           = "hello_gcs"
   event_trigger {
     event_type = "google.storage.object.finalize"
-    resource = "howtoprojecttemplate-gcs-tuto-data"
+    resource = "${local.app_name_short}-gcs-tuto-data" #TO BE REPLACED
   }
 }
 
@@ -34,5 +35,5 @@ resource "google_cloudfunctions_function_iam_member" "invoker" {
   cloud_function = google_cloudfunctions_function.function.name
 
   role   = "roles/cloudfunctions.invoker"
-  member = "user:fabien.houang@loreal.com"
+  member = "user:fabien.houang@loreal.com" #TO BE REPLACED 
 }
