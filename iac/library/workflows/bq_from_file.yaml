@@ -1,0 +1,26 @@
+
+bq_job_insertion_from_file:
+    params: [projectId, bucket, file]
+    steps:
+        - get_query:
+            call: http.get
+            args:
+                url: $${"https://www.googleapis.com/storage/v1/b/" + bucket + "/o/" + file + "?alt=media"}
+                headers:
+                    Content-Type: "text/plain"
+                auth:
+                    type: OAuth2
+            result: get_query_resp
+        - insert_bq_job:
+            call: googleapis.bigquery.v2.jobs.insert
+            args:
+                projectId: $${projectId}
+                body:
+                    configuration:
+                        query:
+                            query: $${get_query_resp.body}
+                            allowLargeResults: true
+                            useLegacySql: false
+                        jobReference:
+                            location: ${location}
+            result: insert_result

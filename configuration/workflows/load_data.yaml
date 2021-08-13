@@ -4,54 +4,28 @@ main:
         - init_global:
             assign:
             - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
-
-        - get_load_master_query:
-            call: http.get
-            args:
-                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/load_master_data.sql?alt=media
-                headers:
-                    Content-Type: "text/plain"
-                auth:
-                    type: OAuth2
-            result: get_load_master_query_resp
+            - bucketId: howtoprojecttemplate-gcs-queries
           
         - load_master_data:
-            call: bq_job_insertion_wo_monitoring
+            call: bq_job_insertion_from_file
             args:
               projectId: $${projectId}
-              query: $${get_load_master_query_resp.body}
+              bucket: $${bucketId}
+              file: load_master_data.sql
             result: load_master_data_result
       
-        - get_load_fact_query:
-            call: http.get
-            args:
-                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/load_fact_data.sql?alt=media
-                headers:
-                    Content-Type: "text/plain"
-                auth:
-                    type: OAuth2
-            result: get_load_fact_query_resp
-
         - load_fact_data:
-            call: bq_job_insertion_wo_monitoring
+            call: bq_job_insertion_from_file
             args:
               projectId: $${projectId}
-              query: $${get_load_fact_query_resp.body}
+              bucket: $${bucketId}
+              file: load_fact_data.sql
             result: load_fact_data_result
 
-        - get_join_tables_query:
-            call: http.get
-            args:
-                url: https://www.googleapis.com/storage/v1/b/howtoprojecttemplate-gcs-queries/o/join_tables.sql?alt=media
-                headers:
-                    Content-Type: "text/plain"
-                auth:
-                    type: OAuth2
-            result: get_join_tables_query_resp
-
         - join_tables:
-            call: bq_job_insertion_wo_monitoring
+            call: bq_job_insertion_from_file
             args:
               projectId: $${projectId}
-              query: $${get_join_tables_query_resp.body}
+              bucket: $${bucketId}
+              file: join_tables.sql
             result: join_tables_result
