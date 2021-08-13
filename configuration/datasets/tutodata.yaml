@@ -6,13 +6,13 @@ criticity: c3                       #c1,c2 or c3
 location: eu
 data_domain: tutodata
 domain_code: 101
-owned_by: fabien.houang@loreal.com                      #Data owner email address
+owned_by: fabien.houang@loreal.com #TO BE REPLACED      #Data owner email address
 delete_contents_on_destroy: true
 delete_table_expiration_ms: null
 permissions:
   sbx1:
     owners:
-          - user:fabien.houang@loreal.com
+          - user:fabien.houang@loreal.com #TO BE REPLACED 
 tags:
   entry_group_id: domain_layer_101_tutodata
   layer: DOMAIN LAYER

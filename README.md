@@ -90,7 +90,6 @@ Same for configinterface_api, flows, matviews, sql_scripts, state-machine, table
 #### 4. Modify terraform files in `iac/` folder according to the infrastructure you need for your project.
 
 #### 5. Use `ENV=<my-env> make iac-clean`, `ENV=<my-env> make iac-plan` and `ENV=<my-env> make iac-deploy` to clean, plan and deploy your resources.
-</br>
 
 ## Initialize the CICD
 
@@ -127,7 +126,7 @@ For example:
     "owner":"fabien-houang-oa"
 }
 ```
-</details></br>
+</details>
 
 #### 2. In `setup/cicd/`, modify Makefile to suit your needs
 
@@ -196,7 +195,9 @@ vim configuration/workflows/<my-workflow>.yaml
 Check [`configuration/workflows/load_data.yaml`](configuration/workflows/load_data.yaml) for an example workflow.
 This workflow create 2 external tables (fact and master) linked to the 2 csv files and then create a result table by joining the 2 external tables.
 
-#### 4. Create a Cloud function to run the Workflow and update the tables automatically
+The terraform file that will create the ressources from the yaml file is [`iac/workflows.tf`](iac/workflows.tf).
+
+#### 4. Create a Cloud function to run the workflow and update the tables automatically
 
 ```shell
 vim iac/<my-cloud-function>.tf
@@ -210,5 +211,7 @@ zip run_workflow.zip main.py requirements.txt
 
 [`main.py`](utils/cloud_functions/main.py) contains the python code executed by the cloud function.</br>
 [`requirements.txt`](utils/cloud_functions/requirements.txt) contains the libraries needed to execute the code.
+
+This Cloud Function print event metadata and run the workflow on each modification on the specified bucket.
 
 #### 5. Create an API for querying the result table
