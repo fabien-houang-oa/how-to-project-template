@@ -7,7 +7,7 @@ resource "google_storage_bucket" "bucket_function" {
 resource "google_storage_bucket_object" "archive" {
   name   = "run_workflow.zip"
   bucket = google_storage_bucket.bucket_function.name
-  source = "${path.module}/../utils/cloud_functions/run_workflow.zip"
+  source = "${path.root}/utils/cloud_functions/run_workflow.zip" #path to the zip of the code to be executed on Cloud Function
 }
 
 resource "google_cloudfunctions_function" "function" {

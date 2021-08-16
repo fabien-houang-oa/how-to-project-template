@@ -4,7 +4,7 @@ locals {
   app_name       = var.app_name
   app_name_short = replace(var.app_name, "-", "")
 
-  configuration_folder = "${path.module}/../configuration"
+  configuration_folder = "${path.root}/configuration"
 
   project     = var.project
   project_env = var.project_env
@@ -25,6 +25,8 @@ locals {
     "multiregion",
     regex("^europe-", local.region) == "europe-" ? "eu" : (regex("^us-", local.region) == "us-" ? "us" : null)
   )
+
+  #workflow curently only available in europe-west4 in europe
   workflow_region = "europe-west4" #lookup(local.env, "workflow_region", local.region)
 
   btdpback_project = lookup(

@@ -5,10 +5,11 @@ from google.cloud import workflows_v1
 from google.cloud.workflows import executions_v1
 from google.cloud.workflows.executions_v1.types import executions
 
-# TODO(developer): Uncomment these lines and replace with your values.
+# TODO(developer): REPLACE with your values.
 project = 'btdp-sbx-f-houang'
 location = 'europe-west4'
 workflow = 'load_data'
+############################################
 
 if not project:
     raise Exception('GOOGLE_CLOUD_PROJECT env var is required.')

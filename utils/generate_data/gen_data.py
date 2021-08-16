@@ -1,9 +1,9 @@
-# Simple script to generate some random stress test files
+# Simple script to generate some random fact table data in a CSV
 import pandas as pd
 from random import randrange
 import datetime 
 
-df_cities = pd.read_csv('gs://howtoprojecttemplate-gcs-tuto-data/upload/worldcities.csv')
+df_cities = pd.read_csv('gs://howtoprojecttemplate-gcs-tuto-data/upload/worldcities.csv') # TO BE CHANGED
 
 print(df_cities["id"])
 
