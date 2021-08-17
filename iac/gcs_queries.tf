@@ -10,7 +10,7 @@ locals {
 }
 
 resource "google_storage_bucket" "bucket_queries" {
-  name = "${local.app_name_short}-gcs-queries" #TO BE CHANGED if already exist
+  name = "${local.app_name_short}-gcs-queries-${}-${}" #TO BE CHANGED if already exist
   project = local.project
 }
 
