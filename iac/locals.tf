@@ -4,7 +4,7 @@ locals {
   app_name       = var.app_name
   app_name_short = replace(var.app_name, "-", "")
 
-  configuration_folder = "${path.root}/configuration"
+  configuration_folder = "../configuration"
 
   project     = var.project
   project_env = var.project_env

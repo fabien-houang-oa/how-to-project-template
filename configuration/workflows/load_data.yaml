@@ -4,7 +4,7 @@ main:
         - init_global:
             assign:
             - projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
-            - bucketId: howtoprojecttemplate-gcs-queries # TO BE CHANGED
+            - bucketId: ${bucketId} #howtoprojecttemplate-gcs-queries
           
         - load_master_data:
             call: bq_job_insertion_from_file

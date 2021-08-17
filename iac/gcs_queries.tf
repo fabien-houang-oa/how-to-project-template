@@ -1,6 +1,12 @@
 locals {
   query_file_extension = "sql"
-  query_list = fileset("${local.configuration_folder}/workflows/queries", "*.${local.query_file_extension}")
+  query_list = {
+    for file in fileset("${local.configuration_folder}/workflows/queries", "**/[^.]*.${local.query_file_extension}") :
+    file => templatefile(
+      "${local.configuration_folder}/workflows/queries/${file}",
+      { dataset = "howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1" } #TO BE CHANGED with the dataset created
+    )
+  }
 }
 
 resource "google_storage_bucket" "bucket_queries" {
@@ -12,5 +18,5 @@ resource "google_storage_bucket_object" "queries" {
   for_each = local.query_list
   name = each.key
   bucket = google_storage_bucket.bucket_queries.name
-  source = "${local.configuration_folder}/workflows/queries/${each.key}"
+  content = each.value
 }

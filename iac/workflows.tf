@@ -10,7 +10,8 @@ locals {
         project             = local.project,
         project_env         = local.project_env,
         location            = local.multiregion,
-        cloudrun_url_suffix = local.cloudrun_url_suffix
+        cloudrun_url_suffix = local.cloudrun_url_suffix,
+        bucketId            = google_storage_bucket.bucket_queries.name 
       }
     )
   }
