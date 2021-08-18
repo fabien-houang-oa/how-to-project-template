@@ -24,7 +24,7 @@ resource "google_cloudfunctions_function" "function" {
   entry_point           = "hello_gcs"
   event_trigger {
     event_type = "google.storage.object.finalize"
-    resource = "${local.app_name_short}-gcs-tuto-data" #TO BE REPLACED
+    resource = google_storage_bucket.bucket_data.name
   }
 }
 
