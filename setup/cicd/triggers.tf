@@ -25,6 +25,16 @@ resource "google_cloudbuild_trigger" "iac-pullrequest-trigger" {
     }
 
     step {
+      id         = "create zip for cloud function"
+      name       = "gcr.io/cloud-builders/gcloud"
+      entrypoint = "bash"
+      args = [
+        "-c",
+        "zip utils/cloud_functions/run_workflow.zip utils/cloud_functions/main.py utils/cloud_functions/requirements.txt"
+      ]
+    }
+
+    step {
       id         = "build on ${local.pullrequest_env}"
       name       = "gcr.io/itg-btdpshared-gbl-ww-pd/generic-build"
       entrypoint = "bash"
