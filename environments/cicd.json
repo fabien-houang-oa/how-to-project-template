@@ -1,9 +1,12 @@
 {
     "project": "btdp-sbx-f-houang",
+    "region": "europe-west1",
+    "multiregion": "eu",
+    "pullrequest_branch": "develop",
     "triggers_env": {
         "sbx1": {
           "branch": "develop",
-          "disabled": true
+          "disabled": false
         }
     },
     "pullrequest_env":"sbx1",

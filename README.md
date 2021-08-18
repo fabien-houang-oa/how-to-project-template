@@ -32,7 +32,7 @@ The purpose of this repository is to explain how to use the Project Template to 
 
 ## Initialize the Project
 
-#### 1. Modify `.app_name` file with your application name, recommend to use your github repository name.
+#### 1. Modify `.app_name` file with your application name, recommend using your github repository name.
 
 #### 2. Create a sandbox environment file `<my-env>.json` (`sbx.json` for example) in `environments/` folder with 
 
@@ -105,6 +105,8 @@ Same for configinterface_api, flows, matviews, sql_scripts, state-machine, table
     "owner":"<my-github-username>"
 }
 ```
+
+See [`setup/cicd/README.md`](setup/cicd/README.md) for more details.
 
 For example:
 <details>
@@ -198,7 +200,7 @@ mkdir configuration/workflows/
 vim configuration/workflows/<my-workflow>.yaml
 ```
 Check [`configuration/workflows/load_data.yaml`](configuration/workflows/load_data.yaml) for an example workflow.
-This workflow creates 2 external tables (fact and master) linked to the 2 csv files and then create a result table by joining the 2 external tables.
+This workflow creates 2 external tables (fact and master) linked to the 2 csv files and then creates a result table by joining the 2 external tables.
 
 The workflow is calling subworkflows defined in `iac/library/workflows`, this tutorial will only use [`iac/library/workflows/bq_from_file.yaml`](iac/library/workflows/bq_from_file.yaml).
 
