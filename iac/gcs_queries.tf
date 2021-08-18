@@ -4,7 +4,7 @@ locals {
     for file in fileset("${local.configuration_folder}/workflows/queries", "**/[^.]*.${local.query_file_extension}") :
     file => templatefile(
       "${local.configuration_folder}/workflows/queries/${file}",
-      { dataset = "howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1" } #TO BE CHANGED with the dataset created
+      { dataset = "howtoprojecttemplate_ds_c3_101_tutodata_eu_sbx1" } #TO BE CHANGED with the created dataset
     )
   }
 }
