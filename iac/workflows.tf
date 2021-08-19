@@ -11,7 +11,7 @@ locals {
         project_env         = local.project_env,
         location            = local.multiregion,
         cloudrun_url_suffix = local.cloudrun_url_suffix,
-        bucketId            = google_storage_bucket.bucket_queries.name 
+        bucketId            = google_storage_bucket.bucket_queries.name #templating for the bucket id of query files
       }
     )
   }

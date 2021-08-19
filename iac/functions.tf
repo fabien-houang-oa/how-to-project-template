@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "bucket_function" {
-  name = "${local.app_name_short}-gcs-functions-${local.multiregion}-${local.project_env}" #TO BE CHANGED if already exist
+  name = "${local.app_name_short}-gcs-functions-${local.multiregion}-${local.project_env}"
   project = local.project
   force_destroy = true
 }

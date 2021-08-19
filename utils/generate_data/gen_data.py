@@ -3,9 +3,9 @@ import pandas as pd
 from random import randrange
 import datetime 
 
-df_cities = pd.read_csv('worldcities.csv')
+df_cities = pd.read_csv('worldcities.csv') # path to csv file
 
-print(df_cities["id"])
+#print(df_cities["id"])
 
 lines = 100000
 

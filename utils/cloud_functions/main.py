@@ -6,9 +6,9 @@ from google.cloud.workflows import executions_v1
 from google.cloud.workflows.executions_v1.types import executions
 
 # TODO(developer): REPLACE with your values.
-project = 'btdp-sbx-f-houang'
-location = 'europe-west4'
-workflow = 'load_data'
+project = 'btdp-sbx-f-houang'   #project id
+location = 'europe-west4'       #workflow curently only available in europe-west4 in europe
+workflow = 'load_data'          #workflow id
 ############################################
 
 if not project:
@@ -44,6 +44,7 @@ def run_workflow():
             print(execution.result)
             return execution.result
 
+# Entrypoint of the cloud function
 def hello_gcs(event, context):
     """Background Cloud Function to be triggered by Cloud Storage.
        This generic function logs relevant data when a file is changed.
