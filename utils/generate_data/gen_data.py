@@ -3,7 +3,7 @@ import pandas as pd
 from random import randrange
 import datetime 
 
-df_cities = pd.read_csv('gs://howtoprojecttemplate-gcs-tuto-data/upload/worldcities.csv') # TO BE CHANGED
+df_cities = pd.read_csv('worldcities.csv')
 
 print(df_cities["id"])
 

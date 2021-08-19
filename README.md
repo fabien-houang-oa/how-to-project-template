@@ -17,6 +17,7 @@ The purpose of this repository is to explain how to use the Project Template to 
 - [Example project](#example-project)
   * [Purpose](#purpose)
   * [Data for the tutorial](#data-for-the-tutorial)
+  * [Tutorial Architecture](#tutorial-architecture)
   * [Steps to create the project](#steps-to-create-the-project)
 
 
@@ -95,6 +96,9 @@ Same for configinterface_api, flows, matviews, sql_scripts, state-machine, table
 ```json
 {
     "project": "<my-project-id>",
+    "region": "europe-west1",
+    "multiregion": "eu",
+    "pullrequest_branch": "<my-branch>",
     "triggers_env": {
         "<my-env>": {
           "branch": "<my-branch>",
@@ -102,7 +106,7 @@ Same for configinterface_api, flows, matviews, sql_scripts, state-machine, table
         }, ...
     },
     "pullrequest_env":"<my-env>",
-    "owner":"<my-github-username>"
+    "owner":"<repo-owner-github-username>"
 }
 ```
 
@@ -115,6 +119,9 @@ For example:
 ```json
 {
     "project": "btdp-sbx-f-houang",
+    "region": "europe-west1",
+    "multiregion": "eu",
+    "pullrequest_branch": "develop",
     "triggers_env": {
         "sbx": {
           "branch": "develop",
